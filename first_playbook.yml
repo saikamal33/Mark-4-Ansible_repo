@@ -3,15 +3,18 @@
   hosts: all
   become: yes
   become_user: root
-  
+
   tasks:
-  - name: install nginx
-    apt:
-      name: nginx
-      state: present
+    - name: install nginx
+      apt:
+        name: nginx
+        state: present
+    - name: run nginx
+      service:
+        name: nginx
+        state: started
+      register: nginx_status
 
-  - name: run nginx
-    service:
-      name: nginx
-      state: started
-
+    - name: view status
+      debug:
+        msg: "nginx status is {{ nginx_status.state }}"
