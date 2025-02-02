@@ -1,0 +1,5 @@
+mysql_root_pass: "strongpass"
+mysql_db_name: "mydb"
+mysql_user: "db_user"
+mysql_user_pass: "db_pass"
+

@@ -1,0 +1,101 @@
+---
+- name: configure SQL DB
+  hosts: dbserver
+  become: yes
+  vars_files:
+    - var.yml
+
+  tasks:
+    - name: update system
+      ansible.builtin.apt:
+        update_cache: yes
+
+    - name: install mysql
+      apt:
+        name: mysql-server
+        state: present
+        update_cache: yes
+
+    - name: mysql status
+      ansible.legacy.systemd:
+        name: mysql
+        state: started
+        enabled: yes 
+    
+    - name: Ensure /root/.my.cnf exists with correct permissions
+      copy:
+        dest: /root/.my.cnf
+        content: |
+          [client]
+          user=root
+          password="{{ mysql_root_pass }}"
+          host=localhost
+        mode: '0600'
+
+    - name: Install python3-venv package
+      apt:
+        name: python3-venv
+        state: present
+        update_cache: yes
+    
+    - name: Install build dependencies for mysqlclient
+      apt:
+        name:
+          - pkg-config
+          - libmysqlclient-dev
+          - build-essential
+          - python3-dev
+        state: present
+        update_cache: yes
+    
+    - name: Check if virtual environment exists
+      stat:
+        path: "/home/{{ ansible_user }}/myenv/bin/python"
+      register: venv_status
+
+    - name: Create a virtual environment
+      command: python3 -m venv /home/{{ ansible_user }}/myenv
+      args:
+        creates: /home/{{ ansible_user }}/myenv
+      when: venv_status.stat.exists == False
+    
+    - name: Set ansible_python_interpreter for whole playbook after this
+      set_fact:
+        ansible_python_interpreter: "/home/{{ ansible_user }}/myenv/bin/python"
+
+    - name: Install pip in the virtual environment
+      ansible.builtin.shell:
+        cmd: /home/{{ ansible_user }}/myenv/bin/python /tmp/get-pip.py
+        creates: /home/{{ ansible_user }}/myenv/bin/pip
+
+    - name: Install packaging module in the virtual environment
+      ansible.builtin.shell:
+        cmd: /home/{{ ansible_user }}/myenv/bin/pip install packaging
+        creates: /home/{{ ansible_user }}/myenv/lib/python3.12/site-packages/packaging
+
+    - name: Install python for SQL (mysqlclient)
+      ansible.builtin.pip:
+        name: mysqlclient
+        executable: /home/{{ ansible_user }}/myenv/bin/pip
+
+    - name: set root password
+      mysql_user:
+        name: root
+        password: "{{ mysql_root_pass }}"
+        host: localhost
+        state: present
+
+    - name: create new sql data
+      mysql_db:
+        name: "{{ mysql_db_name }}"
+        state: present
+
+    - name: create a new sql user
+      mysql_user:
+        name: "{{ mysql_user }}"
+        password: "{{ mysql_user_pass }}"
+        priv: "{{ mysql_db_name }}.*:ALL"
+        state: present
+        host: "%"
+
+
