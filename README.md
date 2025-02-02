@@ -20,3 +20,10 @@ To install apache 2 web service in the ubuntu instance
 
 we will also install, run, launch and simple html web page 
 
+# ans-mark-4.4
+
+launch an ec2 and connect with that instance with shared "Key pair assigned at launch" and with ansible. we will install and configure mysql db in it.
+
+First we update the instance, then install mysql, and we install python3 in virtual env and install build dependeces for sqlcli
+
+ 
