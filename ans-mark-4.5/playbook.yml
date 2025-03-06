@@ -1,0 +1,89 @@
+---
+- name: setup jenkins
+  hosts: ec2
+  become: yes
+  tasks:
+    - name: update apt
+      apt:
+        update_cache: yes
+
+    - name: install java (requred for java)
+      apt:
+        name: openjdk-17-jdk
+        state: present
+    
+    - name: Download Jenkins GPG key
+      get_url:
+        url: https://pkg.jenkins.io/debian-stable/jenkins.io-2023.key
+        dest: /usr/share/keyrings/jenkins-keyring.asc
+
+    - name: Add Jenkins repository to apt sources
+      ansible.builtin.shell: |
+        echo "deb [signed-by=/usr/share/keyrings/jenkins-keyring.asc] https://pkg.jenkins.io/debian-stable binary/" > /etc/apt/sources.list.d/jenkins.list
+      args:
+        creates: /etc/apt/sources.list.d/jenkins.list
+    
+    - name: install dependencies
+      apt:
+        name:
+          - apt-transport-https
+          - ca-certificates
+          - curl
+          - software-properties-common
+        state: present
+
+    - name: Update apt package list
+      apt:
+        update_cache: yes
+
+    - name: install jenkins
+      apt:
+        name: jenkins
+        state: present
+
+    - name: start jenkins service
+      service:
+        name: jenkins
+        state: started
+        enabled: yes
+
+    - name: Add Docker GPG apt Key
+      apt_key:
+        url: https://download.docker.com/linux/ubuntu/gpg
+        state: present
+
+    - name: Add Docker Repository
+      apt_repository:
+        repo: deb https://download.docker.com/linux/ubuntu focal stable
+        state: present
+
+    - name: install Docker
+      apt:
+        name: docker-ce
+        state: present
+
+    - name: start docker service
+      service:
+        name: docker
+        state: started
+        enabled: yes
+
+    - name: add jenkins user to docker group
+      user:
+        name: "{{ item}}"
+        groups: docker
+        append: yes
+      loop:
+        - jenkins
+        - ubuntu
+
+    - name: verify docker installation
+      command: docker --version
+      register: docker_version
+      changed_when: false
+
+    - name: display docker version
+      debug:
+        msg: "docker version installed: {{ docker_version.stdout }}"
+
+
