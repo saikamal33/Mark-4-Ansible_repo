@@ -26,4 +26,12 @@ launch an ec2 and connect with that instance with shared "Key pair assigned at l
 
 First we update the instance, then install mysql, and we install python3 in virtual env and install build dependeces for sqlcli
 
+# ans-mark-4.5
+
+launch an ec2 and connect with that instance with shared "Key pair assigned at launch" and with ansible. To install jenkins and docker in it.
+
+First we update the instance, then install java-17 which is required for jenkins to run then we will continue installing jenkins, and then we install dependencies, download and install docker 
+
+Now we can run both the jenkins and docker at the end, and get the versions as validation.
+
  
