@@ -1,0 +1,28 @@
+- name: Install prerequisites
+  apt:
+    name: ['apt-transport-https','ca-certificates','curl','software-properties-common']
+    state: present
+    update_cache: yes
+
+- name: add Docker GPG key
+  apt_key:
+    url: https://download.docker.com/linux/ubuntu/gpg
+    state: present
+
+- name: add Docker repo
+  apt_repository:
+   repo: deb https://download.docker.com/linux/ubuntu focal stable
+   state: present
+
+- name: install Docker
+  apt:
+    name: docker-ce
+    state: latest
+    update_cache: yes
+
+- name: ensure Docker is running
+  service:
+    name: docker
+    state: started
+    enabled: true
+
