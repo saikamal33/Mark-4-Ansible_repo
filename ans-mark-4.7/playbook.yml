@@ -1,0 +1,37 @@
+- name: simple web app
+  hosts: all
+  become: true
+
+  tasks:
+    - name: update apt packages
+      ansible.builtin.apt:
+        update_cache: yes
+
+    - name: install nginx
+      ansible.builtin.apt:
+        name: nginx
+        state: present
+
+    - name: start nginx
+      ansible.builtin.service:
+        name: nginx
+        state: started
+        enabled: yes
+
+    - name: install python
+      ansible.builtin.apt:
+        name: python3-venv
+        state: present
+
+
+    - name: install postgresql
+      ansible.builtin.apt:
+        name: postgresql
+        state: present
+    
+    - name: start and enable postgresql
+      ansible.builtin.service:
+        name: postgresql
+        state: started
+        enabled: yes
+
