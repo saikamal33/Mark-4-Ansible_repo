@@ -1,4 +1,9 @@
 # Mark-4
+Yaml syntex link for reference
+~~~
+https://docs.ansible.com/ansible/latest/reference_appendices/YAMLSyntax.html
+~~~
+
 ansible playbook for installing, starting
 ### To run the playbook
 ~~~
