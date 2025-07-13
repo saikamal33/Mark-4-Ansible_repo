@@ -14,7 +14,22 @@
         name: nginx
         state: started
       register: nginx_status
+    
+    - name: new config update
+      copy:
+        src: /home/test/Mark-4-Ansible_repo/ans-mark-4.1/nginx.conf
+        dest: /etc/nginx/nginx.conf
+      notify: 
+        - restart the nginx
+        - view status
+
+  handlers:
+    - name: restart the nginx
+      service:
+        name: nginx
+        state: restarted
 
     - name: view status
       debug:
         msg: "nginx status is {{ nginx_status.state }}"
+...
