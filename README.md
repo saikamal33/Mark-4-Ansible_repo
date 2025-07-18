@@ -14,6 +14,21 @@ ansible-playbook -i <inventory_file>  <playbook.yml file>
 ansible -i <inventory_file> all -m  "shell" -a "touch dev"
 ~~~
 
+### Idempotency in ansible
+
+**idempotency** : it means doing something once has the same effect as doing it multiple times. it is the crucial part of ansible. As Running a playbook multiple times will always result in the same system state — without making unnecessary changes after the first successful run.
+
+EX: when we are installing a package
+~~~
+- name: Ensure nginx is installed
+  ansible.builtin.yum:
+    name: nginx
+    state: present
+~~~
+
+- first run will install nginx (Changed = 1)
+- next runs will do no actions (Changed = 0)
+
 # ans-mark-4.1
 To install,run,and checking status of nginx on ec2 instance
 
