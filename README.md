@@ -29,6 +29,8 @@ EX: when we are installing a package
 - first run will install nginx (Changed = 1)
 - next runs will do no actions (Changed = 0)
 
+**NOTE** : it is module dependent , as in if we are using build in ansible modules then they are idempotent. but if we use raw commands & shell tasks then idempotency is not guaranteed.
+
 # ans-mark-4.1
 To install,run,and checking status of nginx on ec2 instance
 
