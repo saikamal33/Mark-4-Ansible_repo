@@ -1,37 +1,29 @@
-- name: simple web app
+- name: install and configure SSL cert 
   hosts: all
-  become: true
+  become: yes
+  vars_files:
+    - var.yml
 
   tasks:
-    - name: update apt packages
-      ansible.builtin.apt:
+    - name: install Certbot, nginx, and dependencies
+      apt:
+        name: 
+          - nginx
+          - certbot
+          - python3-certbot-nginx
+        state: present
         update_cache: yes
 
-    - name: install nginx
-      ansible.builtin.apt:
+    - name : obtain SSL certs
+      command: > 
+        certbot --nginx -n --agree-tos --email {{ email }} -d {{ domain_name }}
+
+      args:
+        creates : "/etc/letsencrypt/live/{{ domain_name }}/fullchain.pem"
+
+    - name: reload nginx
+      service:
         name: nginx
-        state: present
+        state: restart
 
-    - name: start nginx
-      ansible.builtin.service:
-        name: nginx
-        state: started
-        enabled: yes
-
-    - name: install python
-      ansible.builtin.apt:
-        name: python3-venv
-        state: present
-
-
-    - name: install postgresql
-      ansible.builtin.apt:
-        name: postgresql
-        state: present
     
-    - name: start and enable postgresql
-      ansible.builtin.service:
-        name: postgresql
-        state: started
-        enabled: yes
-
