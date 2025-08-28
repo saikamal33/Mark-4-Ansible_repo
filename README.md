@@ -1,4 +1,9 @@
 # Mark-4
+Yaml syntex link for reference
+~~~
+https://docs.ansible.com/ansible/latest/reference_appendices/YAMLSyntax.html
+~~~
+
 ansible playbook for installing, starting
 ### To run the playbook
 ~~~
@@ -8,6 +13,23 @@ ansible-playbook -i <inventory_file>  <playbook.yml file>
 ~~~
 ansible -i <inventory_file> all -m  "shell" -a "touch dev"
 ~~~
+
+### Idempotency in ansible
+
+**idempotency** : it means doing something once has the same effect as doing it multiple times. it is the crucial part of ansible. As Running a playbook multiple times will always result in the same system state — without making unnecessary changes after the first successful run.
+
+EX: when we are installing a package
+~~~
+- name: Ensure nginx is installed
+  ansible.builtin.yum:
+    name: nginx
+    state: present
+~~~
+
+- first run will install nginx (Changed = 1)
+- next runs will do no actions (Changed = 0)
+
+**NOTE** : it is module dependent , as in if we are using build in ansible modules then they are idempotent. but if we use raw commands & shell tasks then idempotency is not guaranteed.
 
 # ans-mark-4.1
 To install,run,and checking status of nginx on ec2 instance
