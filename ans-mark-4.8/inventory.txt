@@ -1,5 +1,5 @@
 [dev]
-172.31.40.242
+16.170.217.41 ansible_user=ubuntu
 
 [prd]
-197.83.45.92197.83.45.92
+16.170.223.5 ansible_user=ubuntu
