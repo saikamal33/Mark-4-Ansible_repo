@@ -1,22 +1,25 @@
 ---
-- name: installing apache
-  hosts: webservers
+- name: schedule cron job for backup log
+  hosts: all
   become: true
-
+  
   tasks:
-    - name: installing the apache
-      apt:
-        name: apache2
-        state: present
+    - name: copy backup script
+      copy:
+        src: backup.sh.j2
+        dest: /usr/local/bin/backup_{{ env_name }}.sh
+        mode: '0755'
 
-    - name: start the apache
-      service:
-        name: apache2
-        state: started
-        enabled: true
-      register: apache_status
-
-    - name: status
+    - name: Create cron job for backup
+      ansible.builtin.cron:      
+        name: "backup script for {{ env_name }}"
+        job: "/usr/local/bin/backup_{{ env_name }}.sh"
+        minute: "{{ cron_time.split() [0] }}"
+        hour: "{{ cron_time.split() [1] }}"
+        user: "{{ ansible_user }}"
+        state: present    
+          
+    - name: Debug variables
       debug:
-        msg: "apache status is {{apache_status}}"
+        msg: "env_name={{ env_name }}, cron_time={{ cron_time }}"        
 ...
