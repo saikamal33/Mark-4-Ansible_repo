@@ -10,9 +10,9 @@ Inventory file holds two groups like
 
 Now variables in the group_vars/dev.yml will be used by dev group in inventory, just like that varables in group_vars/prod.yml will be used by servers in prod group in inventory.
 
+we dont need to call the group variables in playboook as it automatically collect them as per the groups in inventory.
 ## j2 extention for the shell script file
 
     .j2 = Jinja2 Template File
 
 Ansible uses the Jinja2 templating engine to dynamically generate files or content. Files ending in .j2 are treated as templates where variables, loops, and conditionals can be used.
-
