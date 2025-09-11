@@ -1,0 +1,10 @@
+# To dynamicly get ec2 host details at run time 
+
+plugin: aws_ec2
+regions:
+  - us-east-1
+keyed_groups:
+  - key: tags.Role
+    prefix: role
+filters:
+  instance-state-name: running
