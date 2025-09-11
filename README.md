@@ -58,7 +58,20 @@ Create a file at ~/.aws/credentials
 
 If we are running Ansible from an EC2 instance, and that instance has an IAM role with sufficient permissions, authentication happens automatically via the instance metadata service.
 
-      
+
+## {{ playbook_dir }}
+
+it is a built-in Ansible variable that automatically resolves to the absolute path of the directory containing the currently running playbook.
+
+          my-ansible-project/
+          ├── playbook.yml
+          ├── group_vars/
+          │   └── all.yaml
+          ├── files/
+          │   └── my-key.pem
+
+          which we can use it as "{{ playbook_dir }}/files/my-key.pem"
+          
 # ans-mark-4.1
 To install,run,and checking status of nginx on ec2 instance
 
