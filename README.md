@@ -14,7 +14,7 @@ ansible-playbook -i <inventory_file>  <playbook.yml file>
 ansible -i <inventory_file> all -m  "shell" -a "touch dev"
 ~~~
 
-### Idempotency in ansible
+## Idempotency in ansible
 
 **idempotency** : it means doing something once has the same effect as doing it multiple times. it is the crucial part of ansible. As Running a playbook multiple times will always result in the same system state — without making unnecessary changes after the first successful run.
 
@@ -38,6 +38,27 @@ Dynamic inventory plugins are built-in or custom Python-based modules that defin
 
 Each plugin is configured using a YAML configuration file.
 
+**NOTE** : we need to have an authentication in place, so the boto3 plugin can communicate with the env.
+
+We can use authentication menthods like
+
+1) **Environment Variables (Most Common)** 
+
+        export AWS_ACCESS_KEY_ID='your-access-key-id'
+        export AWS_SECRET_ACCESS_KEY='your-secret-access-key'
+        export AWS_DEFAULT_REGION='us-west-2'
+2) **AWS Credentials File** (in case of AWS) 
+
+Create a file at ~/.aws/credentials
+
+        [default]
+        aws_access_key_id = your-access-key-id
+        aws_secret_access_key = your-secret-access-key
+3) **IAM Role** (for EC2 Instances)
+
+If we are running Ansible from an EC2 instance, and that instance has an IAM role with sufficient permissions, authentication happens automatically via the instance metadata service.
+
+      
 # ans-mark-4.1
 To install,run,and checking status of nginx on ec2 instance
 
