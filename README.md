@@ -1,4 +1,4 @@
-# Mark-4
+# Ansible
 Yaml syntex link for reference
 ~~~
 https://docs.ansible.com/ansible/latest/reference_appendices/YAMLSyntax.html
@@ -30,6 +30,13 @@ EX: when we are installing a package
 - next runs will do no actions (Changed = 0)
 
 **NOTE** : it is module dependent , as in if we are using build in ansible modules then they are idempotent. but if we use raw commands & shell tasks then idempotency is not guaranteed.
+
+## Dynamic Inventory
+Ansible by default uses static inventory that contains all the hosts and groups. but environments like AWS,Azure, kubernetes ets has hosts that always changing so Dynamoc inventory is best solution which generates the inventory file at runtime.
+
+Dynamic inventory plugins are built-in or custom Python-based modules that define how and from where to retrieve host data.
+
+Each plugin is configured using a YAML configuration file.
 
 # ans-mark-4.1
 To install,run,and checking status of nginx on ec2 instance
