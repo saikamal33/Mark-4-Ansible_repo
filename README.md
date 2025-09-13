@@ -71,7 +71,12 @@ it is a built-in Ansible variable that automatically resolves to the absolute pa
           │   └── my-key.pem
 
           which we can use it as "{{ playbook_dir }}/files/my-key.pem"
-          
+
+# Set_fact module
+It is an ansible module used to define custom variables during a playbook run. They Are stored in-memory for the current host during execution and can be used later in the same playbook they Can also be accessed like any other Ansible variable.
+
+Facts set with set_fact are temporary for that playbook run unless you use fact_cache
+
 # ans-mark-4.1
 To install,run,and checking status of nginx on ec2 instance
 

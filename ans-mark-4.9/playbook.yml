@@ -1,0 +1,32 @@
+---
+- name: Book of auditing
+  host: all
+  become: True
+
+  tasks:
+    - name: To get the ssh port details
+      shell: grep "^Port" /etc/ssh/sshd_config |awk '{print $2}'
+      register: ssh_port
+      ignore_errors: True
+
+    - name: to check users with UID 0 outside of root
+      shell: awk -F: '$3 == 0 && $1 != "root" { print $1 }' /etc/passwd
+      register: uid_0_user
+      ignore_errors: True
+
+    - name: password auth enabled in sshd
+      shell: grep -Ei '^PasswordAuthentication' /etc/ssh/sshd_config
+      register: password_auth
+      ignore_errors: True
+
+    - name: checking if firewall is active
+      shell: ufw status | grep -i "status"
+      ignore_errors: True
+
+    - name: set audit facts
+      set_fact:
+        audit_summary:
+          hostname: "{{ ansible_hostname }}"
+          ssh_port: "{{ ssh_port.stdout | default('unknown') }}"
+          non_root_uid_0: "{{ uid_0_user.stdout_lines | default('unknown') }}"
+          password_auth: "{{ password_auth.stdout | default('unknown') }}"
