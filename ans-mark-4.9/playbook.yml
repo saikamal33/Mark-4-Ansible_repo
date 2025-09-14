@@ -38,3 +38,38 @@
         content: "{{ audit_summary | to_nice_json }}"
         dest: "/tmp/audit-report.json"
         delegate_to: localhost
+
+#----------------------------------------
+# Remediation Tasks (tagged "remediation")
+#----------------------------------------
+
+    - name: Remediate ssh port - reset to 22
+      lineinfile: 
+        path: /etc/ssh/sshd_config
+        regexp: '^Port\s+'
+        line: 'Port 22'
+        backup: yes
+      notify: Restart ssh
+      tags: remediation
+
+    - name: remove users with UID 0
+      shell: >
+        awk -F: '$3 == 0 && $1 != "root" { print $1 }' /etc/passwd |
+        xargs -r -n1 userdel 
+      tags: remediation
+
+    - name: set passwordauth to no 
+      lineinfile:
+        path: /etc/ssh/sshd_config
+        regexp: '^PasswordAuthentication\s+'
+        line: 'PasswordAuthentication no'
+        backup: yes
+      notify: Restart ssh
+      tags: remediation
+      
+  handlers:
+    - name: Restart ssh
+      service:
+        name: ssh
+        state: restarted
+
