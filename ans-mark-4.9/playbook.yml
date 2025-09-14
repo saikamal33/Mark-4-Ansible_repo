@@ -21,6 +21,7 @@
 
     - name: checking if firewall is active
       shell: ufw status | grep -i "status"
+      register: ufw_status
       ignore_errors: True
 
     - name: set audit facts
@@ -30,3 +31,10 @@
           ssh_port: "{{ ssh_port.stdout | default('unknown') }}"
           non_root_uid_0: "{{ uid_0_user.stdout_lines | default('unknown') }}"
           password_auth: "{{ password_auth.stdout | default('unknown') }}"
+          ufw_status: "{{ ufw_status }}"
+
+    - name: save audit in json
+      copy:
+        content: "{{ audit_summary | to_nice_json }}"
+        dest: "/tmp/audit-report.json"
+        delegate_to: localhost
