@@ -72,11 +72,44 @@ it is a built-in Ansible variable that automatically resolves to the absolute pa
 
           which we can use it as "{{ playbook_dir }}/files/my-key.pem"
 
-# Set_fact module
+## Set_fact module
 It is an ansible module used to define custom variables during a playbook run. They Are stored in-memory for the current host during execution and can be used later in the same playbook they Can also be accessed like any other Ansible variable.
 
 Facts set with set_fact are temporary for that playbook run unless you use fact_cache
 
+## Tags
+Tags allow us to label tasks, plays, or roles so we can run only specific parts of a playbook. They are used to Speed up execution by running only relevant tasks. Run only audit checks or only remediation tasks. Debug or test specific sections without running everything.
+
+        - name: Install nginx
+          apt:
+            name: nginx
+            state: present
+          tags: webserver
+
+They can be executed using
+
+          ansible-playbook site.yml --tags webserver
+
+## Handlers
+Handlers are special tasks triggered by notifications, typically used for actions like Restarting a service after config changes, Reloading daemons, Sending alerts
+
+They run once per play, at the end of the play, but only if notified.
+
+Defining a handler
+
+      handlers:
+        - name: restart nginx
+          service:
+            name: nginx
+            state: restarted
+Notify a handler for task
+
+      - name: Update nginx config
+        template:
+          src: nginx.conf.j2
+          dest: /etc/nginx/nginx.conf
+        notify: restart nginx
+        
 # ans-mark-4.1
 To install,run,and checking status of nginx on ec2 instance
 
