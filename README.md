@@ -58,7 +58,10 @@ Create a file at ~/.aws/credentials
 
 If we are running Ansible from an EC2 instance, and that instance has an IAM role with sufficient permissions, authentication happens automatically via the instance metadata service.
 
+we can check the connectivity by using 
 
+    ansible-inventory -i aws_ec2.yml --list
+    
 ## {{ playbook_dir }}
 
 it is a built-in Ansible variable that automatically resolves to the absolute path of the directory containing the currently running playbook.
