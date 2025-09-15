@@ -1,6 +1,6 @@
 ---
 - name: Book of auditing
-  host: all
+  hosts: role_Webserver
   become: True
 
   tasks:
@@ -10,7 +10,7 @@
       ignore_errors: True
 
     - name: to check users with UID 0 outside of root
-      shell: awk -F: '$3 == 0 && $1 != "root" { print $1 }' /etc/passwd
+      shell: "awk -F: '$3 == 0 && $1 != \"root\" { print $1 }' /etc/passwd"
       register: uid_0_user
       ignore_errors: True
 
@@ -37,7 +37,7 @@
       copy:
         content: "{{ audit_summary | to_nice_json }}"
         dest: "/tmp/audit-report.json"
-        delegate_to: localhost
+      delegate_to: localhost
 
 #----------------------------------------
 # Remediation Tasks (tagged "remediation")
