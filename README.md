@@ -13,7 +13,13 @@ ansible-playbook -i <inventory_file>  <playbook.yml file>
 ~~~
 ansible -i <inventory_file> all -m  "shell" -a "touch dev"
 ~~~
-
+## Ansible Testing
+### Unit Testing
+it is where we Test small, individual parts of your Ansible code—usually a role, a task, or a module—in isolation.
+### Integration Testing
+This is used to Test how multiple parts work together like running your entire playbook or role on an actual environment (like a Docker container, VM, or physical machine).
+### Sanity Testing
+A quick check to ensure your playbook or role runs successfully and performs the essential tasks correctly.
 ## Idempotency in ansible
 
 **idempotency** : it means doing something once has the same effect as doing it multiple times. it is the crucial part of ansible. As Running a playbook multiple times will always result in the same system state — without making unnecessary changes after the first successful run.
