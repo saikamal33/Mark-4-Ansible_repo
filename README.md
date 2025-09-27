@@ -13,6 +13,26 @@ ansible-playbook -i <inventory_file>  <playbook.yml file>
 ~~~
 ansible -i <inventory_file> all -m  "shell" -a "touch dev"
 ~~~
+## Ansible Testing
+### Unit Testing
+it is where we Test small, individual parts of your Ansible code—usually a role, a task, or a module—in isolation. it is used to make sure the building blocks of your automation work correctly before combining them.
+
+This can be done using tools like :
+  - ansible-lint (checks code style and potential issues)
+  - molecule (runs your roles inside containers or VMs)
+  - ansible-test (used mostly for Ansible core module/unit tests
+    
+### Integration Testing
+This is used to Test how multiple parts work together like running your entire playbook or role on an actual environment (like a Docker container, VM, or physical machine). it is used to verify your playbook/roles can run end-to-end without errors and produce the expected environment.
+
+This can be done using tools like:
+  - molecule (creates disposable test environments)
+  - testinfra (Python tests that check the final system state)
+  - Manual or scripted tests on Vagrant VMs, Docker containers, or native Windows/WSL hosts
+### Sanity Testing
+A quick check to ensure your playbook or role runs successfully and performs the essential tasks correctly. it is used to confirm that the automation hasn’t broken and the system is at least minimally functional.
+
+This can be achived by Running the playbook in a controlled environment (sandbox, VM, Docker) and verify key outputs manually or via simple automated checks. Often done as part of CI pipelines.
 
 ## Idempotency in ansible
 
